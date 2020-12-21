@@ -11,6 +11,9 @@ let doc = document.documentElement,
     neumannImg = document.querySelector('#neumann-img'),
     mooreImg = document.querySelector('#moore-img'),
     neighbsTypeSwitch = document.querySelector('#neighbs-type-switch'),
+    neighbsButtons_MooreOnly = document.querySelectorAll('.moore-only'),
+    neighbsToLiveButtons = document.querySelectorAll('.neighbors-list-to-live .neighbors-unit'),
+    neighbsToBornButtons = document.querySelectorAll('.neighbors-list-to-born .neighbors-unit'),
     can = document.querySelector('#can'),
     ctx = can.getContext('2d'),
     iterationSpeed = speedSlider.value,
@@ -18,6 +21,8 @@ let doc = document.documentElement,
     cellSize = 15,
     columns = Math.floor(doc.clientWidth / cellSize),
     rows = Math.floor((doc.clientHeight - 55) / cellSize),
+    cellNumsToBorn = [3],
+    cellNumsToLive = [2, 3],
     area = [],
     newArea = [],
     neighbsToBornChoose,
@@ -30,6 +35,7 @@ let doc = document.documentElement,
     clickedCellY,
     checkNeighbColumn,
     checkNeighbRow;
+console.log(cellNumsToBorn, cellNumsToLive);
 
 menuBtn.onclick = () => {
     settings.classList.toggle('settings-hidden');
@@ -47,9 +53,38 @@ densitySlider.onchange = function() {
 
 neighbsTypeSwitch.checked = false;
 
-neighbsTypeSwitch.onclick = function(event) {
+neighbsTypeSwitch.onclick = function() {
     mooreImg.classList.toggle('neighborhood-switch_img-off');
     neumannImg.classList.toggle('neighborhood-switch_img-off');
+    neighbsButtons_MooreOnly.forEach((elem) => {
+        elem.classList.toggle('neighbors-unit_disabled');
+    });
+}
+
+neighbsToBornButtons.forEach((elem) => {
+    elem.onclick = () => {
+        elem.classList.toggle('neighbors-unit_checked');
+        cellNumsToBorn = makeListOfNumCells(neighbsToBornButtons);
+        console.log(cellNumsToBorn);
+    }
+});
+
+neighbsToLiveButtons.forEach((elem) => {
+    elem.onclick = () => {
+        elem.classList.toggle('neighbors-unit_checked');
+        cellNumsToLive = makeListOfNumCells(neighbsToLiveButtons);
+        console.log(cellNumsToLive);
+    }
+});
+
+function makeListOfNumCells(list) {
+    let cellsList = [];
+    list.forEach((listElem) => {
+        if (listElem.classList.contains('neighbors-unit_checked') && !listElem.classList.contains('neighbors-unit_disabled')) {
+            cellsList.push(Number(listElem.innerHTML));
+        }
+    });
+    return cellsList;
 }
 
 // Задание размеров поля
@@ -115,6 +150,7 @@ function drawField(matrixToDraw) {
 }
 
 function iteration() {
+    console.log(cellNumsToBorn, cellNumsToLive);
     let countOfAliveCells = 0;
     for(let i = 0; i < rows; i++) 
     for(let j = 0; j < columns; j++) {
@@ -123,11 +159,13 @@ function iteration() {
         }
         let neighbors;
         neighbors = checkCellsNeighbors(i, j, neighbsTypeSwitch.checked);
-        if (area[i][j] == 1 && (neighbors >= 2 && neighbors <= 3)) {
+        if (area[i][j] == 1 && cellNumsToLive.includes(neighbors)) {
             newArea[i][j] = 1;
+            console.log(area[i][j] + ' will born');
         }
-        else if (area[i][j] == 0 && neighbors == 3) {
+        else if (area[i][j] == 0 && cellNumsToBorn.includes(neighbors)) {
             newArea[i][j] = 1;
+            console.log(i + ' ' + j + ' still live');
         }
     }
     if (countOfAliveCells == 0) {
@@ -163,9 +201,6 @@ function checkCellsNeighbors(curRow, curCol, isNeumann) {
             }
             // Проверка окружающих клеток на попаданеи в диапазон матрицы
             if (!(checkNeighbRow == curRow && checkNeighbColumn == curCol) && area[checkNeighbRow][checkNeighbColumn] == 1) {
-                // console.log('neighbor is ' + checkNeighbRow + ' ' + checkNeighbColumn);
-                // console.log(area[checkNeighbRow][checkNeighbColumn]);
-                
                 numNeighbs++;
             }
         }

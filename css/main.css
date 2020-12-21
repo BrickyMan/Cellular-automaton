@@ -222,21 +222,29 @@ input:checked + .slider:before {
     background-color: #202020;
 }
 
-.neighbors-live-unit, .neighbors-born-unit {
-    padding: 5px 10px;
+.neighbors-unit {
+    width: 29px;
+    height: 29px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: #202020;
     border-radius: 100px;
     cursor: pointer;
 }
 
-.neighbors-live-unit:hover, .neighbors-born-unit:hover {
+.neighbors-unit:not(.neighbors-unit_checked):hover {
     background-color: #3a3a3a;
     color: white;
 }
 
-.neighbors-live-unit_checked, .neighbors-born-unit_checked {
+.neighbors-unit_checked {
     background-color: #e9b610;
     color: #202020;
+}
+
+.neighbors-unit_disabled {
+    opacity: 0.2;
 }
 
 canvas {
