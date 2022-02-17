@@ -150,7 +150,7 @@ function drawField(matrixToDraw) {
 }
 
 function iteration() {
-    console.log(cellNumsToBorn, cellNumsToLive);
+    // console.log(cellNumsToBorn, cellNumsToLive);
     let countOfAliveCells = 0;
     for(let i = 0; i < rows; i++) 
     for(let j = 0; j < columns; j++) {
@@ -161,11 +161,11 @@ function iteration() {
         neighbors = checkCellsNeighbors(i, j, neighbsTypeSwitch.checked);
         if (area[i][j] == 1 && cellNumsToLive.includes(neighbors)) {
             newArea[i][j] = 1;
-            console.log(area[i][j] + ' will born');
+            // console.log(area[i][j] + ' will born');
         }
         else if (area[i][j] == 0 && cellNumsToBorn.includes(neighbors)) {
             newArea[i][j] = 1;
-            console.log(i + ' ' + j + ' still live');
+            // console.log(i + ' ' + j + ' still live');
         }
     }
     if (countOfAliveCells == 0) {
@@ -181,7 +181,6 @@ function iteration() {
 
 function checkCellsNeighbors(curRow, curCol, isNeumann) {
     let numNeighbs = 0;
-    // console.log('Current is ' + curRow + ' ' + curCol);
     for(let r = -1; r <= 1; r++)
     for(let c = -1; c <= 1; c++) {
         if (!isNeumann || ((r == -1 && c == 0) || r == 0 || (r == 1 && c == 0))) {
@@ -199,7 +198,7 @@ function checkCellsNeighbors(curRow, curCol, isNeumann) {
             else if (checkNeighbColumn >= columns) {
                 checkNeighbColumn = 0;
             }
-            // Проверка окружающих клеток на попаданеи в диапазон матрицы
+            // Проверка окружающих клеток на попадание в диапазон матрицы
             if (!(checkNeighbRow == curRow && checkNeighbColumn == curCol) && area[checkNeighbRow][checkNeighbColumn] == 1) {
                 numNeighbs++;
             }
@@ -208,11 +207,16 @@ function checkCellsNeighbors(curRow, curCol, isNeumann) {
     return numNeighbs;
 }
 
-
+// Нажатие на кнопку запуска симуляции
 playBtn.onclick = () => {
     if (!playBtn.classList.contains('selected')) {
         pauseBtn.classList.remove('selected');
         playBtn.classList.add('selected');
+		if (!settings.classList.contains('settings-hidden')) {
+			settings.classList.toggle('settings-hidden');
+			menuBtn.classList.toggle('menu-off');
+			menuBtn.classList.toggle('menu-on');
+		}
         let iterationTimer = setTimeout(function getIterationTime() {
             iteration();
             pauseBtn.onclick = () => {
