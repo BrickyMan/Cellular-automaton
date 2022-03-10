@@ -130,11 +130,11 @@ nav {
     border-radius: 100px;
     transform: rotate(180deg);
     background-color: #202020;
+	-webkit-appearance: none;
 }
 
 .settings-wrapper input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
-    appearance: none;
     width: 17px;
     height: 17px;
     background: #e9b610;

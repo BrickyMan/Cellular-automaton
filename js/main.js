@@ -35,7 +35,8 @@ let doc = document.documentElement,
     clickedCellY,
     checkNeighbColumn,
     checkNeighbRow;
-console.log(cellNumsToBorn, cellNumsToLive);
+
+// console.log(cellNumsToBorn, cellNumsToLive);
 
 menuBtn.onclick = () => {
     settings.classList.toggle('settings-hidden');
@@ -65,7 +66,7 @@ neighbsToBornButtons.forEach((elem) => {
     elem.onclick = () => {
         elem.classList.toggle('neighbors-unit_checked');
         cellNumsToBorn = makeListOfNumCells(neighbsToBornButtons);
-        console.log(cellNumsToBorn);
+        // console.log(cellNumsToBorn);
     }
 });
 
@@ -73,7 +74,7 @@ neighbsToLiveButtons.forEach((elem) => {
     elem.onclick = () => {
         elem.classList.toggle('neighbors-unit_checked');
         cellNumsToLive = makeListOfNumCells(neighbsToLiveButtons);
-        console.log(cellNumsToLive);
+        // console.log(cellNumsToLive);
     }
 });
 
